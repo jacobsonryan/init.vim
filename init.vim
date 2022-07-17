@@ -30,13 +30,13 @@ endif
 
 set number
 set relativenumber
-" set numberwidth=5
 set autoindent
 set tabstop=2
 set shiftwidth=2
 set nohlsearch
 set smarttab
 set softtabstop=2
+set scrolloff=10
 set encoding=UTF-8
 set background=dark
 set noswapfile
@@ -47,15 +47,25 @@ let g:webdevicons_enable = 1
 let base16colorspace=256 
 let mapleader=" "
 colorscheme github_dark_default
-"hi Normal guibg=NONE ctermbg=NONE
 hi LineNr guibg=none guifg=none
 
 nnoremap <C-p> :Telescope git_files<CR>
 nmap <C-l> :tabn<CR>
-nmap <C-h> :tabp<CR>
-nmap <C-n> :tabnew<CR>
-nmap <leader>n :NvimTreeToggle<cr>
+nmap<C-h> :tabp<CR>
+nmap<C-n> :tabnew<CR>
+nmap<leader>n :NvimTreeToggle<cr>
 
+function Replace()
+	call inputsave()
+	let search = input('Search for: ')
+	call inputrestore()
+	call inputsave()
+	let replace = input('Repleace with: ')
+	call inputrestore()
+	execute '%s#'.search.'#'.replace.'##gc'
+endfunction
+
+nmap<leader>d :call Replace()<cr>
 
 lua << EOF
 	local diagnostics = {
@@ -145,7 +155,7 @@ cmp.setup({
    mapping = {
       ["<Up>"] = cmp.mapping.select_prev_item(),
       ["<Down>"] = cmp.mapping.select_next_item(),
-      ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-Space>"] = cmp.mapping.complete(),
       ["<C-e>"] = cmp.mapping.close(),
